@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Livraria Cultura</string>
+    <string name="dialogflow_token">fef0cd3a1b4a4aecbb7f0bb15f10ebb4</string>
+    <string name="cenario_tour_virtual">TOUR VIRTUAL</string>
+    <string name="cenario_area_leitura">ÁREA DE LEITURA</string>
+    <string name="uuid">5419a893-467c-4812-8cdb-282f5853168f</string>
+    <string name="open_bluetooth_server">Open Bluetooth Server</string>
+    <string name="bluetooth_server_open">Bluetooth Server open</string>
+</resources>
