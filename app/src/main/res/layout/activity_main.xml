@@ -26,19 +26,17 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:contentDescription="Click e fale algo"
-        android:onClick="listenButton"
-        android:src="@drawable/ic_dialogflow" />
+        android:src="@drawable/logo_livraria_cultura"
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/linearLayoutButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnSpeak"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="190dp"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <Button
             android:id="@+id/btnTourVirtual"

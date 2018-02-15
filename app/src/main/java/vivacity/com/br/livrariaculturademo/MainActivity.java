@@ -259,9 +259,10 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
         Result resultado = result.getResult();
 
         final String speech = resultado.getFulfillment().getSpeech();
+        stopSpeak();
         speak(speech, TextToSpeech.QUEUE_FLUSH);
 
-        //handleParameters(resultado.getParameters());
+        handleParameters(resultado.getParameters());
         handleActions(resultado.getAction());
     }
 
@@ -342,8 +343,8 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
 
                             if (text.length() <= TextToSpeech.getMaxSpeechInputLength()) {
 
-                                controlOfColorfulLight(LED.PART_RIGHT_HAND, LED.MODE_YELLOW);// LED do braço direito amarelo.
-                                controlOfColorfulLight(LED.PART_LEFT_HAND, LED.MODE_YELLOW); // LED do braço esquerdo amarelo.
+                                controlOfColorfulLight(LED.PART_RIGHT_HAND, LED.MODE_BLUE);// LED do braço direito amarelo.
+                                controlOfColorfulLight(LED.PART_LEFT_HAND, LED.MODE_BLUE); // LED do braço esquerdo amarelo.
                                 textToSpeech.speak(text, queueMode, null);
 
                             } else {
@@ -443,13 +444,14 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
 
                             case "\"tour virtual\"":
 
-                                //speak("Vamos ali na parede, eu projeto para você.", TextToSpeech.QUEUE_FLUSH);
-                                //starMovie();
+                                speak("Vamos ali na parede, eu projeto para você.", TextToSpeech.QUEUE_FLUSH);
+                                starMovie();
                                 break;
 
                             case "\"área de livros de leitura\"":
 
-                                //speak("Siga-me que eu te levo até lá.", TextToSpeech.QUEUE_FLUSH);
+                                speak("Siga-me que eu te levo até lá.", TextToSpeech.QUEUE_FLUSH);
+                                walk();
 
                                 break;
                         }
@@ -505,6 +507,7 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
 
             case R.id.receivedMessageTextView:
 
+                receivedMessageTextView.setVisibility(View.INVISIBLE);
                 connectServer();
 
                 break;
@@ -746,6 +749,7 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
                                     Toast.makeText(getApplicationContext(),
                                             "Bluetooth Socket closed", Toast.LENGTH_SHORT)
                                             .show();
+                                    receivedMessageTextView.setVisibility(View.VISIBLE);
                                     receivedMessageTextView.setText(getString(
                                             R.string.open_bluetooth_server));
                                 }
