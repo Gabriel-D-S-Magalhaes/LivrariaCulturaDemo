@@ -1,5 +1,6 @@
 package vivacity.com.br.livrariaculturademo;
 
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +55,11 @@ public class ProjetarVideoActivity extends TopBaseActivity {
     protected void onStart() {
         super.onStart();
         Log.i(TAG, "onStart invoked.");
+
+        Intent intent = getIntent();
+        setProjectorOn(intent.getBooleanExtra(MainActivity.EXTRA_PROJECTOR_ON, false));
+        Log.i(TAG, "Projetor foi ligado? " + isProjectorOn());
+
         searchVideos();
         turnOnProjector();
     }
@@ -202,65 +208,87 @@ public class ProjetarVideoActivity extends TopBaseActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
 
-            // Projetor não estava ligado. Em 12s ele será ligado.
-            new CountDownTimer(12000, 4000) {
-                /**
-                 * Callback fired on regular interval.
-                 *
-                 * @param millisUntilFinished The amount of time until finished.
-                 */
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                    //Feedback para o usuário
-                    Toast.makeText(getApplicationContext(), "Aguarde...", Toast.LENGTH_SHORT)
-                            .show();
-                }
-
-                /**
-                 * Callback fired when the time is up.
-                 */
-                @Override
-                public void onFinish() {
-
-                    //Ligando...
-                    if (projectorManager.switchProjector(true).getErrorCode() == 1) {
-
-                        setProjectorOn(true);
-
-                        projectorManager.setMode(ProjectorManager.MODE_WALL);
-
-                        // Em 14s o vídeo será reproduzido
-                        new CountDownTimer(14000, 7000) {
-
-                            /**
-                             * Callback fired on regular interval.
-                             *
-                             * @param millisUntilFinished The amount of time until finished.
-                             */
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-
-                                // Feedback para o usuário
-                                Toast.makeText(getApplicationContext(), "Projetando em "
-                                        + millisUntilFinished / 1000 + "s.", Toast.LENGTH_SHORT).show();
-                            }
-
-                            /**
-                             * Callback fired when the time is up.
-                             */
-                            @Override
-                            public void onFinish() {
-
-                                // Começa a reprodução do vídeo
-                                executarVideo();
-                                // Vídeo reproduzindo
-                            }
-                        }.start();
-                    }
-                }
-            }.start();
+            setProjectorOn(true);
+            projectorManager.setMode(ProjectorManager.MODE_WALL);
+            projectorManager.switchProjector(true);
+//            // Projetor não estava ligado. Em 12s ele será ligado.
+//            new CountDownTimer(12000, 4000) {
+//                /**
+//                 * Callback fired on regular interval.
+//                 *
+//                 * @param millisUntilFinished The amount of time until finished.
+//                 */
+//                @Override
+//                public void onTick(long millisUntilFinished) {
+//
+//                    //Feedback para o usuário
+//                    Toast.makeText(getApplicationContext(), "Aguarde...", Toast.LENGTH_SHORT)
+//                            .show();
+//                }
+//
+//                /**
+//                 * Callback fired when the time is up.
+//                 */
+//                @Override
+//                public void onFinish() {
+//
+//                    //Ligando...
+//                    if (projectorManager.switchProjector(true).getErrorCode() == 1) {
+//
+//                        setProjectorOn(true);
+//
+//                        projectorManager.setMode(ProjectorManager.MODE_WALL);
+//
+//                        // Em 14s o vídeo será reproduzido
+//                        new CountDownTimer(14000, 7000) {
+//
+//                            /**
+//                             * Callback fired on regular interval.
+//                             *
+//                             * @param millisUntilFinished The amount of time until finished.
+//                             */
+//                            @Override
+//                            public void onTick(long millisUntilFinished) {
+//
+//                                // Feedback para o usuário
+//                                Toast.makeText(getApplicationContext(), "Projetando em "
+//                                        + millisUntilFinished / 1000 + "s.", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                            /**
+//                             * Callback fired when the time is up.
+//                             */
+//                            @Override
+//                            public void onFinish() {
+//
+//                                // Começa a reprodução do vídeo
+//                                executarVideo();
+//                                // Vídeo reproduzindo
+//                            }
+//                        }.start();
+//                    }
+//                }
+//            }.start();
         }
+
+        // Esse é o tempo que levara para a cabeça do robô estar na posição do WALL_MODE, ou seja,
+        // o robô estará 100% pronto para reproduzir o(s) vídeo(s)
+        new CountDownTimer(8500, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+                // Feedback para o usuário
+                //Toast.makeText(getApplicationContext(), "Projetando em " + millisUntilFinished / 1000 + "s.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFinish() {
+
+                // Começa a reprodução do vídeo
+                executarVideo();
+                // Vídeo reproduzindo
+            }
+        }.start();
     }
 
     /**
@@ -389,6 +417,6 @@ public class ProjetarVideoActivity extends TopBaseActivity {
 
     @Override
     protected void onMainServiceConnected() {
-
+        Log.i(TAG, "onMainServiceConnected triggered.");
     }
 }

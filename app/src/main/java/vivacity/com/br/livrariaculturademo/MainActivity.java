@@ -34,6 +34,7 @@ import com.qihancloud.opensdk.function.beans.wheelmotion.RelativeAngleWheelMotio
 import com.qihancloud.opensdk.function.unit.HardWareManager;
 import com.qihancloud.opensdk.function.unit.HeadMotionManager;
 import com.qihancloud.opensdk.function.unit.MediaManager;
+import com.qihancloud.opensdk.function.unit.ProjectorManager;
 import com.qihancloud.opensdk.function.unit.SystemManager;
 import com.qihancloud.opensdk.function.unit.WheelMotionManager;
 import com.qihancloud.opensdk.function.unit.interfaces.media.FaceRecognizeListener;
@@ -61,6 +62,7 @@ import ai.api.util.StringUtils;
 public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String EXTRA_PROJECTOR_ON = "br.com.vivacity.livrariaculturademo.PROJECTOR_ON";
 
     private AIDialog aiDialog;
     private AIDataService aiDataService;
@@ -79,12 +81,15 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
     private MediaManager mediaManager;
     private HeadMotionManager headMotionManager;
     private WheelMotionManager wheelMotionManager;
+    private ProjectorManager projectorManager;
 
     // Text to Speech usando Mecanismo de conversão de texto em voz do Google
     private TextToSpeech textToSpeech;
 
     private LinearLayout linearLayoutButton;
     private TextView receivedMessageTextView;
+
+    private boolean projectorOn = false;
 
     private ArrayList<String> values;
 
@@ -116,6 +121,7 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
         mediaManager = (MediaManager) getUnitManager(FuncConstant.MEDIA_MANAGER);
         headMotionManager = (HeadMotionManager) getUnitManager(FuncConstant.HEADMOTION_MANAGER);
         wheelMotionManager = (WheelMotionManager) getUnitManager(FuncConstant.WHEELMOTION_MANAGER);
+        projectorManager = (ProjectorManager) getUnitManager(FuncConstant.PROJECTOR_MANAGER);
 
         final AIConfiguration config = new AIConfiguration(
                 getString(R.string.dialogflow_token),
@@ -300,6 +306,21 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
         return hardWareManager.setLED(led);
     }
 
+    private void turnOnProjector() {
+
+        OperationResult operationResult = projectorManager.switchProjector(true);
+
+        if (operationResult.getErrorCode() == 1) {
+
+            projectorManager.setMode(ProjectorManager.MODE_WALL);
+            this.projectorOn = true;
+
+        } else if (operationResult.getErrorCode() < 0) {
+
+            this.projectorOn = false;
+        }
+    }
+
     /**
      * Inicia o aplicativo Movie.
      */
@@ -308,7 +329,10 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
         File file = new File(Environment.getExternalStorageDirectory().getPath() + "Documents");
         intent.setDataAndType(Uri.fromFile(file), "video*//*");
         startActivity(intent);*/
-        startActivity(new Intent(this, ProjetarVideoActivity.class));
+
+        Intent playVideo = new Intent(getApplicationContext(), ProjetarVideoActivity.class);
+        playVideo.putExtra(EXTRA_PROJECTOR_ON, this.projectorOn);
+        startActivity(playVideo);
     }
 
     /**
@@ -433,6 +457,19 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
 
                 case "input.welcome":
                     linearLayoutButton.setVisibility(View.VISIBLE);
+
+                    new CountDownTimer(10000, 2000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            turnOnProjector();
+                        }
+                    }.start();
+
                     break;
 
                 case "escolha_cenario":
