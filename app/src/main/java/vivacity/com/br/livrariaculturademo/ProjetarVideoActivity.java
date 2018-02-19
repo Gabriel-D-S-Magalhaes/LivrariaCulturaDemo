@@ -54,6 +54,8 @@ public class ProjetarVideoActivity extends TopBaseActivity {
     protected void onStart() {
         super.onStart();
         Log.i(TAG, "onStart invoked.");
+        searchVideos();
+        turnOnProjector();
     }
 
     @Override
@@ -67,8 +69,8 @@ public class ProjetarVideoActivity extends TopBaseActivity {
         super.onResume();
         Log.i(TAG, "onResume invoked.");
 
-        searchVideos();
-        turnOnProjector();
+        //searchVideos();
+        //turnOnProjector();
     }
 
     @Override
