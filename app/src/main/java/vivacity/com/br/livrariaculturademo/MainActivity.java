@@ -304,10 +304,11 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
      * Inicia o aplicativo Movie.
      */
     private void starMovie() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+     /*   Intent intent = new Intent(Intent.ACTION_VIEW);
         File file = new File(Environment.getExternalStorageDirectory().getPath() + "Documents");
-        intent.setDataAndType(Uri.fromFile(file), "video/*");
-        startActivity(intent);
+        intent.setDataAndType(Uri.fromFile(file), "video*//*");
+        startActivity(intent);*/
+        startActivity(new Intent(this, ProjetarVideoActivity.class));
     }
 
     /**

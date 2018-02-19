@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- Para usar um smartphone como mic e, em seguida, enviar a voz convertida em texto. -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -32,7 +33,7 @@
                 android:name="config_record"
                 android:value="true" />
         </activity>
-
+        <activity android:name=".ProjetarVideoActivity"></activity>
     </application>
 
 </manifest>
