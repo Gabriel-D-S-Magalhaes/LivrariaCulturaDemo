@@ -306,6 +306,9 @@ public class MainActivity extends BindBaseActivity implements AIDialog.AIDialogL
         return hardWareManager.setLED(led);
     }
 
+    /**
+     * Chame esse método para começar à ligar o projetor
+     * */
     private void turnOnProjector() {
 
         OperationResult operationResult = projectorManager.switchProjector(true);
